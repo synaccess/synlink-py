@@ -26,13 +26,12 @@ $ pip install synlink_py
 ```python
 from synlink_py import SynLinkPy
 
-pdu1 = SynLinkPy("HTTP_API_TOKEN", "IP_ADDRESS")
+pdu1 = SynLinkPy("IP_ADDRESS", "HTTP_API_TOKEN")
 
 # Change outlet state for a given PDU (Power Distribution Unit)
 pdu1.outlets.set_state("1", "OFF") # accepts outlet number
 pdu1.outlets.set_state("1-1200578", "ON") # accepts unique outlet ID
 pdu1.outlets.set_state("2", "REBOOT") # acceptable states are "OFF", "ON", "REBOOT"
-# returns outlet state?
 
 # Get information of all outlets
 outlet_response = pdu1.outlets.list()
