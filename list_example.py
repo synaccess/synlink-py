@@ -5,15 +5,18 @@
 from synlink_py import SynLinkPy
 
 # compactPdu1 = SynLinkPy("http://192.168.1.179", "9wxBwnck6JhEH0b1DyI")
-compactPdu1 = SynLinkPy("http://192.168.1.179", { "token": "9wxBwnck6JhEH0b1DyI" })
+# compactPdu1 = SynLinkPy("http://192.168.1.179", { "token": "9wxBwnck6JhEH0b1DyI" })
 
 # compactPdu1 = SynLinkPy("http://192.168.1.179", { "token": "9wxBwnck6JhEH0b1DyI" })
 switchedPdu1 = SynLinkPy("http://192.168.1.103", { "username": "admin", "password": "admin" })
 
 # compact_outlets = compactPdu1.outlets.list()
 # switched_outlets = switchedPdu1.outlets.list()
-print(switchedPdu1.outlets.list())
-print(compactPdu1.inlets.list())
+# print(switchedPdu1.outlets.list())
+# print(compactPdu1.inlets.list())
+# print(switchedPdu1.banks.list())
+# print(switchedPdu1.outlets.change_config(1, { "outletName": "Outlet 1" }))
+print(switchedPdu1.groups.list())
 # print("--------")
 # for outlet in switched_outlets:
 #     print(outlet['id'], outlet['outletName'], outlet['state'])

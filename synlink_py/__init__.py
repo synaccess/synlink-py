@@ -40,10 +40,11 @@ class BaseAPI(object):
         if self.token:
             kwargs.setdefault('headers', {})['Authorization'] = 'Bearer ' + self.token
 
+        if self.cookie:
+            kwargs.setdefault('headers', {})['Cookie'] = 'SPID=' + self.cookie
+
         url = self.host + "/api/" + resource + '/' + resource_id
         response = requests.put(url, **kwargs)
-        print(url)
-        print(vars(response))
         if not response.status_code == 200:
             raise Error(response.reason)
 
@@ -64,6 +65,17 @@ class Outlets(BaseAPI):
         data_json_string = json.dumps({"state": state})
         return self.put("outlets", str(outlet), data=data_json_string)
     
+    def change_config(self, outlet, config):
+        """Change the configuration of an outlet.
+
+        :param outlet: The outlet number or outlet ID to set.
+        :param config: The configuration to set the outlet to.
+        :return: The response from the API.
+        """
+        data_json_string = json.dumps(config)
+        print(data_json_string)
+        return self.put("outlets", str(outlet), data=data_json_string)
+
     def list(self):
         """List all outlets.
 
@@ -81,6 +93,39 @@ class Inlets(BaseAPI):
 
         return self.get("inlets")
 
+class Banks(BaseAPI):
+    def list(self):
+        """List all banks.
+
+        :return: The response from the API.
+        """
+
+        return self.get("banks")
+
+class Device(BaseAPI):
+    def info(self):
+        """Get device information.
+
+        :return: The response from the API.
+        """
+
+        return self.get("device")
+
+class Groups(BaseAPI):
+    def list(self):
+        """List all groups.
+
+        :return: The response from the API.
+        """
+
+        return self.get("groups")
+    def create(self, name, outlets):
+        """Create a group.
+
+        :return: The response from the API.
+        """
+        data_json_string = json.dumps({"groupName": name})
+        return self.put("groups", str(name), data=data_json_string)
 
 class SynLinkPy(object):
   def __init__(self, host, credentials, timeout=DEFAULT_TIMEOUT):
@@ -107,3 +152,6 @@ class SynLinkPy(object):
 
       self.outlets = Outlets(**api_args)
       self.inlets = Inlets(**api_args)
+      self.banks = Banks(**api_args)
+      self.device = Device(**api_args)
+      self.groups = Groups(**api_args)
