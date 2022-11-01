@@ -35,7 +35,8 @@ pdu1.outlets.set_state("2", "REBOOT") # acceptable states are "OFF", "ON", "REBO
 
 # Get information of all outlets
 outlet_response = pdu1.outlets.list()
-outlets = outlet_response.body['outlets']
+for outlet in outlet_response:
+    print(outlet['id'], outlet['outletName'], outlet['state'])
 
 # Get information on inlet(s)
 inlet_response = pdu1.inlets.list()
@@ -47,6 +48,51 @@ pdu1.config.set("lcdOutletControlEnabled", false)
 
 ```
 
-### Documentation
+### HTTP API Documentation
 
 <https://synaccess.com/support/webapi>
+
+### Commands
+
+#### Outlet Commands
+
+```python
+pdu1 = SynLinkPy("IP_ADDRESS", "HTTP_API_TOKEN")
+
+# Change outlet state for a given PDU (Power Distribution Unit)
+pdu1.outlets.set_state("1", "OFF") # accepts outlet number
+pdu1.outlets.set_state("1-1200578", "ON") # accepts unique outlet ID
+pdu1.outlets.set_state("2", "REBOOT") # acceptable states are "OFF", "ON", "REBOOT"
+
+# Get information of all outlets
+outlet_response = pdu1.outlets.list()
+for outlet in outlet_response:
+    print(outlet['id'], outlet['outletName'], outlet['state'])
+
+```
+
+#### Inlet Commands
+
+```python
+pdu1 = SynLinkPy("IP_ADDRESS", "HTTP_API_TOKEN")
+
+inlet_response = pdu1.inlets.list()
+
+for inlet in inlet_response:
+    print(inlet['id'], inlet['inletCurrentRms'])
+
+```
+
+
+#### Bank Commands
+
+```python
+pdu1 = SynLinkPy("IP_ADDRESS", "HTTP_API_TOKEN")
+
+banks_response = pdu1.banks.list()
+
+for bank in banks_response:
+    print(bank['id'], bank['currentRms'])
+
+```
+

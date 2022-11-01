@@ -50,6 +50,31 @@ class BaseAPI(object):
 
         return response.json()
 
+    def post(self, resource, **kwargs):
+        if self.token:
+            kwargs.setdefault('headers', {})['Authorization'] = 'Bearer ' + self.token
+
+        if self.cookie:
+            kwargs.setdefault('headers', {})['Cookie'] = 'SPID=' + self.cookie
+
+        url = self.host + "/api/" + resource
+        response = requests.post(url, **kwargs)
+        if not response.status_code == 200:
+            raise Error(response.reason)
+        return response.json()
+
+    def remove(self, resource, resource_id, **kwargs):
+        if self.token:
+            kwargs.setdefault('headers', {})['Authorization'] = 'Bearer ' + self.token
+
+        if self.cookie:
+            kwargs.setdefault('headers', {})['Cookie'] = 'SPID=' + self.cookie
+        url = self.host + "/api/" + resource + '/' + resource_id
+        response = requests.delete(url, **kwargs)
+        if not response.status_code == 200:
+            raise Error(response.reason)
+        return response.text
+
 
 class Outlets(BaseAPI):
     def set_state(self, outlet, state):
@@ -119,13 +144,65 @@ class Groups(BaseAPI):
         """
 
         return self.get("groups")
-    def create(self, name, outlets):
+    def create(self, name ):
         """Create a group.
-
         :return: The response from the API.
         """
         data_json_string = json.dumps({"groupName": name})
-        return self.put("groups", str(name), data=data_json_string)
+        return self.post("groups", data=data_json_string)
+
+    def modify(self, id, config):
+        """Modify a group.
+        modify outlets in group, change name, and/or modify sequencing time
+        :return: The response from the API.
+        """
+        data_json_string = json.dumps(config)
+        return self.put("groups", str(id), data=data_json_string)
+
+    def delete(self, id):
+        """Delete a group.
+        :return: The response from the API.
+        """
+        return self.remove("groups", str(id))
+
+    def set_state(self, id, state):
+        """Set the state of a group.
+
+        :param id: The group ID to set.
+        :param state: The state to set the group to. Can be "ON" or "OFF", or "REBOOT".
+        :return: The response from the API.
+        """
+        if state != "REBOOT" and state != "ON" and state != "OFF":
+            raise Error("State must be 'ON', 'OFF', or 'REBOOT'")
+
+        data_json_string = json.dumps({"state": state})
+        return self.put("groups", str(id), data=data_json_string)
+
+class Configuration(BaseAPI):
+    def list(self):
+        """List all configuration.
+
+        :return: The response from the API.
+        """
+
+        return self.get("conf")
+    
+    def set(self, config):
+        """Set configuration.
+
+        :return: The response from the API.
+        """
+        data_json_string = json.dumps(config)
+        return self.post("conf", data=data_json_string)
+
+class Sensors(BaseAPI):
+    def list(self):
+        """List all sensors.
+
+        :return: The response from the API.
+        """
+
+        return self.get("sensors")
 
 class SynLinkPy(object):
   def __init__(self, host, credentials, timeout=DEFAULT_TIMEOUT):
@@ -155,3 +232,5 @@ class SynLinkPy(object):
       self.banks = Banks(**api_args)
       self.device = Device(**api_args)
       self.groups = Groups(**api_args)
+      self.conf = Configuration(**api_args)
+      self.sensors = Sensors(**api_args)
