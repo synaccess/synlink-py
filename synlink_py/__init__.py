@@ -42,9 +42,11 @@ class BaseAPI(object):
 
         if self.cookie:
             kwargs.setdefault('headers', {})['Cookie'] = 'SPID=' + self.cookie
-
         url = self.host + "/api/" + resource + '/' + resource_id
+        print(url)
+        print(kwargs)
         response = requests.put(url, **kwargs)
+        print(vars(response))
         if not response.status_code == 200:
             raise Error(response.reason)
 
@@ -218,7 +220,7 @@ class SynLinkPy(object):
           api_args["token"] = credentials["token"]
 
       elif (credentials.get("token") == None and credentials.get("username") != None and credentials.get("password") != None):
-          print("No token, username and password though")
+          # print("No token, username and password though")
           res = requests.post(host + "/login", data=json.dumps({ "username": credentials["username"], "password": credentials["password"] }))
           if res.status_code != 200:
               raise Error("Login failed")
