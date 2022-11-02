@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling", "requests", "json"]
+build-backend = "hatchling.build"
+
+[project]
+name = "synlink_py"
+version = "0.0.10"
+authors = [
+  { name="Kevin Han", email="kevin.han@synaccess.com" },
+]
+description = "HTTP Python Wrapper for Synaccess SynLink PDU HTTP API."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/synaccess/synlink-py"
+"Bug Tracker" = "https://github.com/synaccess/synlink-py/issues"

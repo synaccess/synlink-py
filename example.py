@@ -20,8 +20,9 @@ for outlet in outlet_response:
 
 # Get information on inlet(s)
 inlet_response = pdu1.inlets.list()
-inlets = inlet_response.body['inlets']
+for inlet in inlet_response:
+    print(inlet['id'], inlet['inletCurrentRms'], inlet["inletVoltageRms"])
 
 # Modify Configuration 
 # https://synaccess.com/support/webapi#configuration
-pdu1.config.set("lcdOutletControlEnabled", false)
+pdu1.conf.set("lcdOutletControlEnabled", False)
