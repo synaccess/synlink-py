@@ -2,7 +2,7 @@ import json
 import requests
 # import time
 
-__version__ = "0.1.0"
+__version__ = "0.0.12"
 
 DEFAULT_TIMEOUT = 10
 DEFAULT_RETRIES = 0
