@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-"""List outlets in PDU"""
-
-
-from synlink_py import SynLinkPy
 
 from synlink_py import SynLinkPy
 
