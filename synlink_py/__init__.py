@@ -43,10 +43,7 @@ class BaseAPI(object):
         if self.cookie:
             kwargs.setdefault('headers', {})['Cookie'] = 'SPID=' + self.cookie
         url = self.host + "/api/" + resource + '/' + resource_id
-        print(url)
-        print(kwargs)
         response = requests.put(url, **kwargs)
-        print(vars(response))
         if not response.status_code == 200:
             raise Error(response.reason)
 
@@ -100,7 +97,6 @@ class Outlets(BaseAPI):
         :return: The response from the API.
         """
         data_json_string = json.dumps(config)
-        print(data_json_string)
         return self.put("outlets", str(outlet), data=data_json_string)
 
     def list(self):
@@ -216,7 +212,7 @@ class SynLinkPy(object):
       }
       # if no token, then login and with user name and password and set cookie
       if (credentials.get("token") != None):
-          print("Token used")
+          # print("Token used")
           api_args["token"] = credentials["token"]
 
       elif (credentials.get("token") == None and credentials.get("username") != None and credentials.get("password") != None):

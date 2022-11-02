@@ -111,9 +111,8 @@ https://synaccess.com/support/webapi#inlets
 pdu1 = SynLinkPy("http://192.168.1.100", { "username": "admin", "password": "admin" })
 
 inlet_response = pdu1.inlets.list()
-
 for inlet in inlet_response:
-    print(inlet['id'], inlet['inletCurrentRms'], inlet["inletVoltageRms"])
+    print(inlet['id'], inlet['inletPlug'], inlet['inletCurrentRms'] )
 
 # OUTPUT
 # I1-1000036 0.0 117.4000015258789
