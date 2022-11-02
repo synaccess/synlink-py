@@ -25,4 +25,4 @@ for inlet in inlet_response:
 
 # Modify Configuration 
 # https://synaccess.com/support/webapi#configuration
-pdu1.conf.set("lcdOutletControlEnabled", False)
+pdu1.conf.set({"lcdOutletControlEnabled": False})
