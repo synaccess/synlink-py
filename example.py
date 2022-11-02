@@ -2,7 +2,7 @@
 
 from synlink_py import SynLinkPy
 
-pdu1 = SynLinkPy("IP_ADDRESS", "HTTP_API_TOKEN")
+pdu1 = SynLinkPy("http://192.168.1.103", { "username": "admin", "password": "admin" })
 
 # Change outlet state for a given PDU (Power Distribution Unit)
 pdu1.outlets.set_state("1", "OFF") # accepts outlet number
@@ -17,7 +17,7 @@ for outlet in outlet_response:
 # Get information on inlet(s)
 inlet_response = pdu1.inlets.list()
 for inlet in inlet_response:
-    print(inlet['id'], inlet['inletCurrentRms'], inlet["inletVoltageRms"])
+    print(inlet['id'], inlet['inletPlug'], inlet['inletCurrentRms'] )
 
 # Modify Configuration 
 # https://synaccess.com/support/webapi#configuration
