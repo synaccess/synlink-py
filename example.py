@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from synlink_py import SynLinkPy
+from synlinkpy import SynLinkPy
 
 pdu1 = SynLinkPy("http://192.168.1.103", { "username": "admin", "password": "admin" })
 

@@ -18,13 +18,13 @@ SynLink Python Library is a Python interface for the [SynLink Smart PDU API](htt
 ### Installation
 
 ```bash
-$ pip install synlink_py
+$ pip install synlinkpy
 ```
 
 ### Examples
 
 ```python
-from synlink_py import SynLinkPy
+from synlinkpy import SynLinkPy
 
 pdu1 = SynLinkPy("http://192.168.1.100", { "username": "admin", "password": "admin" })
 
