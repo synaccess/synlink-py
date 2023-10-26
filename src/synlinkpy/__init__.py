@@ -45,7 +45,14 @@ class BaseAPI(object):
         url = self.host + "/api/" + resource + '/' + resource_id
         response = requests.put(url, **kwargs)
         if not response.status_code == 200:
-            raise Error(response.reason)
+            if response.text:
+                try:
+                    error_message = response.json()
+                except (KeyError, ValueError):
+                    error_message = response.text
+            else:
+                error_message = "Error: No response received from server."
+            raise Error(error_message)
 
         return response.json()
 
@@ -58,8 +65,19 @@ class BaseAPI(object):
 
         url = self.host + "/api/" + resource
         response = requests.post(url, **kwargs)
+
         if not response.status_code == 200:
-            raise Error(response.reason)
+            if response.text:
+                try:
+                    error_message = response.json()
+                except (KeyError, ValueError):
+                    error_message = response.text
+            else:
+                error_message = "Error: No response received from server."
+            raise Error(error_message)
+
+        # if not response.status_code == 200:
+            # raise Error(response.reason)
         return response.json()
 
     def remove(self, resource, resource_id, **kwargs):
@@ -176,6 +194,59 @@ class Groups(BaseAPI):
         data_json_string = json.dumps({"state": state})
         return self.put("groups", str(id), data=data_json_string)
 
+class Events(BaseAPI):
+    def list(self):
+        """List all events.
+
+        :return: The response from the API.
+        """
+
+        return self.get("events")
+    def create(self, eventObject ):
+        """Create a event.
+        :return: The response from the API.
+        """
+        data_json_string = json.dumps(eventObject)
+        return self.post("events", data=data_json_string)
+    def modify(self, id, eventObject):
+        """Modify a event.
+        :return: The response from the API.
+        """
+        data_json_string = json.dumps(eventObject)
+        return self.put("events", str(id), data=data_json_string)
+    def delete(self, id):
+        """Delete a event.
+        :return: The response from the API.
+        """
+        return self.remove("events", str(id))
+    
+class Actions(BaseAPI):
+    def list(self):
+        """List all actions.
+
+        :return: The response from the API.
+        """
+
+        return self.get("actions")
+    def create(self, actionObject ):
+        """Create a action.
+        :return: The response from the API.
+        """
+        data_json_string = json.dumps(actionObject)
+        return self.post("actions", data=data_json_string)
+    def modify(self, id, actionObject):
+        """Modify a action.
+        :return: The response from the API.
+        """
+        data_json_string = json.dumps(actionObject)
+        return self.put("actions", str(id), data=data_json_string)
+    def delete(self, id):
+        """Delete a action.
+        :return: The response from the API.
+        """
+        return self.remove("actions", str(id))
+
+
 class Configuration(BaseAPI):
     def list(self):
         """List all configuration.
@@ -232,3 +303,6 @@ class SynLinkPy(object):
       self.groups = Groups(**api_args)
       self.conf = Configuration(**api_args)
       self.sensors = Sensors(**api_args)
+      self.events = Events(**api_args)
+      self.actions = Actions(**api_args)
+    

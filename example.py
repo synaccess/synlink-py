@@ -2,7 +2,7 @@
 
 from synlinkpy import SynLinkPy
 
-pdu1 = SynLinkPy("http://192.168.1.103", { "username": "admin", "password": "admin" })
+pdu1 = SynLinkPy("http://192.168.1.101", { "username": "admin", "password": "admin" })
 
 # Change outlet state for a given PDU (Power Distribution Unit)
 pdu1.outlets.set_state("1", "OFF") # accepts outlet number

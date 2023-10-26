@@ -89,6 +89,9 @@ pdu1.outlets.set_state("1", "OFF") # accepts outlet number
 pdu1.outlets.set_state("1-1200578", "ON") # accepts unique outlet ID
 pdu1.outlets.set_state("2", "REBOOT") # acceptable states are "OFF", "ON", "REBOOT"
 
+# Change outlet name for a given PDU
+pdu1.outlets.change_config("1", { "outletName": "example name" })
+
 # Get information of all outlets
 outlet_response = pdu1.outlets.list()
 
@@ -219,3 +222,50 @@ for sensor in sensors_response:
 # B Temperature & Humidity Sensor 22.9057 39.50677
 
 ```
+
+
+#### Event & Action Commands
+
+Events API Information
+https://synaccess.com/support/webapi#events
+
+Actions API Information
+https://synaccess.com/support/webapi#actions
+
+```python
+pdu1 = SynLinkPy("http://192.168.1.100", { "username": "admin", "password": "admin" })
+
+# List all events
+event_response = pdu1.events.list()
+for events in event_response:
+    print(events['id'], events['name'], events['code'], events['params'], events['actions'], events['triggered'])
+# OUTPUT
+# 1 Example High Current Event for Bank #1 31 ['2003757', '16', '10'] [] False
+
+
+# List all actions
+action_response = pdu1.actions.list()
+for actions in action_response:
+    print(actions['id'], actions['name'], actions['code'], actions['params'])
+# OUTPUT
+#1 Example Power Cycle for Outlet #1 12 ['1-2003757', '', '']
+
+# Create an action
+example_action = pdu1.actions.create({ "name": "example reboot", "code": 12, "params": ["1-2003757","",""] })
+
+# Create an event
+example_event pdu1.events.create({"name": "example outlet current event", "code": 46, "params": ["1-2003757", "0.2", "3"], "actions": []})
+
+# Modify an event
+pdu1.events.modify(example_event['id'], "actions": [example_action['id']])
+
+# Modify an action
+pdu1.actions.modify(example_action['id'], { "name": "example reboot 2", "code": 12, "params": ["2-2003757","",""] })
+
+# Delete an event
+pdu1.events.delete(example_event['id'])
+
+# Delete an action
+pdu1.actions.delete(example_action['id'])
+
+
