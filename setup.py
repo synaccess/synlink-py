@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name="synlinkpy",
-    version="0.0.12",
+    version="0.0.13",
     packages=['synlinkpy'],
     description="A SynLink PDU API Client",
     long_description=readme,
