@@ -2,7 +2,9 @@ import json
 import requests
 # import time
 
-__version__ = "0.0.12"
+from requests_toolbelt.multipart.encoder import MultipartEncoder
+
+__version__ = "0.0.14"
 
 DEFAULT_TIMEOUT = 10
 DEFAULT_RETRIES = 0
@@ -152,6 +154,57 @@ class Device(BaseAPI):
 
         return self.get("device")
 
+class System(BaseAPI):
+
+    def fwUpdate(self, file_path):
+        """Upload firmware update file to the device and reboot.
+
+        :param file_path: The path to the firmware file (.swu).
+        :return: The response from the API.
+        """
+        if not self.host or not file_path:
+            raise Error("Host and file path must be provided.")
+        
+        try:
+            print("Firmware update in progress... Please do not power off. This may take a few minutes.")
+            # Create the multipart form-data payload
+            with open(file_path, 'rb') as file:
+                form_data = MultipartEncoder(fields={'file': (file_path, file, 'application/octet-stream')})
+                headers = {
+                    'Content-Type': form_data.content_type
+                }
+                if self.token:
+                    headers['Authorization'] = 'Bearer ' + self.token
+                if self.cookie:
+                    headers['Cookie'] = 'SPID=' + self.cookie
+
+                # Perform the firmware update
+                url = f"{self.host}/api/system/firmware"
+                response = requests.post(url, data=form_data, headers=headers, timeout=480)
+                if response.status_code == 200:
+                    print("Firmware update successful.")
+                else:
+                    print("Firmware update failed.")
+                    raise Error(response.text)
+
+            # Reboot the device after firmware update
+            print("Rebooting the device...")
+            reboot_url = f"{self.host}/api/system/reboot"
+            reboot_headers = {}
+            if self.cookie:
+                reboot_headers['Cookie'] = 'SPID=' + self.cookie
+
+            reboot_response = requests.post(reboot_url, headers=reboot_headers, timeout=30)
+            if reboot_response.status_code == 200:
+                print("Device reboot successful.")
+                return True
+            else:
+                print("Device reboot failed.")
+                raise Error(reboot_response.text)
+
+        except Exception as e:
+            raise Error(f"Firmware update error: {str(e)}")
+
 class Groups(BaseAPI):
     def list(self):
         """List all groups.
@@ -300,6 +353,7 @@ class SynLinkPy(object):
       self.inlets = Inlets(**api_args)
       self.banks = Banks(**api_args)
       self.device = Device(**api_args)
+      self.system = System(**api_args)
       self.groups = Groups(**api_args)
       self.conf = Configuration(**api_args)
       self.sensors = Sensors(**api_args)

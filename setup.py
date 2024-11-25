@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name="synlinkpy",
-    version="0.0.13",
+    version="0.0.14",
     packages=['synlinkpy'],
     description="A SynLink PDU API Client",
     long_description=readme,
@@ -13,7 +13,10 @@ setup(
     author="Synaccess",
     author_email="support@synaccess.com",
     url="https://synaccess.com",
-    install_requires=['requests >= 2.2.1'],
+    install_requires=[
+        'requests >= 2.2.1',
+        'requests-toolbelt >= 0.9.1'  # Added the new dependency
+    ],    
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
