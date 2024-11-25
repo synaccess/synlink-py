@@ -5,6 +5,7 @@ idna==2.8
 pluggy==0.9.0
 py==1.8.0
 requests>=2.2.1
+requests-toolbelt >= 0.9.1
 responses==0.10.6
 six==1.12.0
 toml==0.10.0

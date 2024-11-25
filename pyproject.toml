@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling", "requests"]
+requires = ["hatchling", "requests", "requests-toolbelt"]  
 build-backend = "hatchling.build"
 
 [project]
 name = "synlinkpy"
-version = "0.0.12"
+version = "0.0.14"
 authors = [
   { name="Kevin Han", email="kevin.han@synaccess.com" },
 ]
