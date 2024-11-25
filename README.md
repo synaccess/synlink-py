@@ -268,4 +268,20 @@ pdu1.events.delete(example_event['id'])
 # Delete an action
 pdu1.actions.delete(example_action['id'])
 
+```
 
+#### System Commands
+
+```python
+pdu1 = SynLinkPy("http://192.168.1.100", { "username": "admin", "password": "admin" })
+
+response = pdu1.system.fwUpdate("./SP000005_2.5.90_1730425460_ab2721b.swu")
+# Firmware update in progress...
+# Firmware update successful.
+# Rebooting the device...
+# Device reboot successful.
+
+print(response)
+# True
+
+```
